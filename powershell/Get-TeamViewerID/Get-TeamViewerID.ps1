@@ -10,13 +10,13 @@
 
 .NOTES
 
-	    FileName:  Get-TeamviewerID.ps1
+    FileName:  Get-TeamviewerID.ps1
 
-	    Author:  Tim Wetterek Andersson
+    Author:  Tim Wetterek Andersson
 
-	    Contact: timwa@protonmail.com
+    Contact: timwa@protonmail.com
 
-	    Created: 2019-02-25
+    Created: 2019-02-25
 
 #>
 

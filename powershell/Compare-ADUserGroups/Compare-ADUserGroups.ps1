@@ -1,21 +1,21 @@
 <#
 .Synopsis
-    This script compares two different AD users and outputs which groups are common and which groups are user specific.
+		This script compares two different AD users and outputs which groups are common and which groups are user specific.
 
 
 .DESCRIPTION
-    This script is used for troubleshooting why users don't get the access they need based on Active Directory user groups.
+		This script is used for troubleshooting why users don't get the access they need based on Active Directory user groups.
 		Instead of opening up the AD console to scroll back and forth in two user accounts it outputs the similarities and differences in a grid view.
 
 .NOTES
 
-	    FileName:  Compare-UserGroups
+		FileName:  Compare-UserGroups
 
-	    Author:  Tim Wetterek Andersson
+		Author:  Tim Wetterek Andersson
 
-	    Contact: timwa@protonmail.com
+		Contact: timwa@protonmail.com
 
-	    Created: 2019-04-01
+		Created: 2019-04-01
 
 #>
 
