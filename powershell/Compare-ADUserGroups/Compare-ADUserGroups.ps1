@@ -25,14 +25,14 @@ $input_user2 = Get-ADUser "username2"
 $user1 = Get-ADPrincipalGroupMembership -Identity $input_user1
 $user2 = Get-ADPrincipalGroupMembership -Identity $input_user2
 
-$result = Compare-Object -referenceobject ($user) -DifferenceObject ($user2) -Property name -IncludeEqual | Foreach-object {
-	if ($_.SideIndicator -eq '=>')
+$result = Compare-Object -referenceobject ($user1) -DifferenceObject ($user2) -Property name -IncludeEqual | Foreach-object {
+	if ($_.SideIndicator -eq '<=')
 	{
 		$_.SideIndicator = $input_user1.givenName + ' ' + $input_user1.Surname + 's group'
 
 	}
 
-	elseif ($_.SideIndicator -eq '<=')
+	elseif ($_.SideIndicator -eq '=>')
 	{
 		$_.SideIndicator = $input_user2.givenName + ' ' + $input_user2.Surname + 's group'
 	}
