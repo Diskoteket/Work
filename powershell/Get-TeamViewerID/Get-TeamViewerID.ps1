@@ -27,3 +27,4 @@ $LocalKeyValue = Invoke-Command -Session $Session -ScriptBlock {
   $RegKey = 'HKLM:\SOFTWARE\WOW6432Node\TeamViewer'
   $RemoteKeyValue = (Get-ItemProperty -Path $RegKey -Name ClientID).ClientID; $RemoteKeyValue
 }
+#test
