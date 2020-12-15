@@ -1,0 +1,210 @@
+#!/bin/bash
+# Written by Tim Wetterek Andersson(tim@wetterek.se) 2020-12-15
+todaysdate=$(date +'%Y-%m-%d');
+
+smtprelay1="smtprelay1";
+smtprelay2="smtprelay2";
+spamguard1="spamguard1";
+spamguard2="spamguard2";
+
+regexsmtprelaypt1='.*(Passed CLEAN)(.*)(';
+regexsmtprelaypt2=')> ->(.*)ms';
+
+regexspamguardpt1='.*(Passed CLEAN)(.*) -> <(';
+regexspamguardpt2=')(.*)ms';
+
+
+#User input
+echo "What is your ticket number?";
+read ticketnumber;
+mkdir -p ~/$ticketnumber/tmp/{smtprelay,spamguard};
+
+echo "Who are you looking for? (john.doe@example.com)";
+read address;
+
+tput setaf 3;
+echo "Starting gathering of logs from smtprelay1 and smtprelay2";
+#smtprelay1
+##SCP Files
+tput sgr0;
+echo "Enter the password for smtprelay1";
+tput setaf 3;
+scp USER@SERVER_IP:/var/log/mail-*.bz2 ~/$ticketnumber/tmp/smtprelay;
+tput setaf 2;
+echo "Finished gathering logs from smtprelay1";
+cd ~/$ticketnumber/tmp/smtprelay;
+
+##Rename files
+tput setaf 3;
+echo "Renaming log files from smtprelay1";
+for f in *.bz2
+do
+  mv "$f" "smtprelay1-""${f%.bz2}".bz2
+done;
+tput setaf 2;
+echo "Finished renaming logs from smtprelay1";
+
+##Unzip files
+tput setaf 3;
+echo "Decompressing logs from smtprelay1"
+tput setaf 3;
+bzip2 -d *.bz2;
+tput setaf 2;
+echo "Finished decompressing logs from smtprelay1"
+
+##Remove old zip-files
+rm *.bz2;
+
+#smtprelay2
+##SCP Files
+tput sgr0;
+echo "Enter the password for smtprelay2";
+tput setaf 3;
+scp USER@SERVER_IP:/var/log/mail-*.bz2 ~/$ticketnumber/tmp/smtprelay;
+tput setaf 2;
+echo "Finished gathering logs from smtprelay2";
+cd ~/$ticketnumber/tmp/smtprelay;
+
+##Rename files
+tput setaf 3;
+echo "Renaming log files from smtprelay2";
+for f in *.bz2
+do
+  mv "$f" "smtprelay2-""${f%.bz2}".bz2
+done;
+tput setaf 2;
+echo "Finished renaming logs from smtprelay2";
+
+##Unzip files
+tput setaf 3;
+echo "Decompressing logs from smtprelay2"
+tput setaf 3;
+bzip2 -d *.bz2;
+tput setaf 2;
+echo "Finished decompressing logs from smtprelay2"
+
+##Remove old zip-files
+rm *.bz2;
+tput setaf 3;
+echo "Starting gathering of logs from spamguard1 and spamguard2";
+
+#spamguard1
+##SCP Files
+tput sgr0;
+echo "Enter the password for spamguard1";
+tput setaf 3;
+scp USER@SERVER_IP:/var/log/mail-*.bz2 ~/$ticketnumber/tmp/spamguard;
+tput setaf 2;
+echo "Finished gathering logs from spamguard1";
+cd ~/$ticketnumber/tmp/spamguard;
+
+##Rename files
+tput setaf 3;
+echo "Renaming log files from spamguard1";
+for f in *.bz2
+do
+  mv "$f" "spamguard1-""${f%.bz2}".bz2
+done;
+tput setaf 2;
+echo "Finished renaming logs from spamguard1";
+
+##Unzip files
+tput setaf 3;
+echo "Decompressing logs from spamguard1"
+tput setaf 3;
+bzip2 -d *.bz2;
+tput setaf 2;
+echo "Finished decompressing logs from spamguard1"
+
+##Remove old zip-files
+rm *.bz2;
+
+#spamguard2
+##SCP Files
+tput sgr0;
+echo "Enter the password for spamguard2";
+tput setaf 3;
+scp USER@SERVER_IP:/var/log/mail-*.bz2 ~/$ticketnumber/tmp/spamguard;
+tput setaf 2;
+echo "Finished gathering logs from spamguard2";
+cd ~/$ticketnumber/tmp/spamguard;
+
+##Rename files
+tput setaf 3;
+echo "Renaming log files from spamguard2";
+for f in *.bz2
+do
+  mv "$f" "spamguard2-""${f%.bz2}".bz2
+done;
+tput setaf 2;
+echo "Finished renaming logs from spamguard2";
+
+##Unzip filesmaillog-$ticketnumber-$todaysdate-$address
+tput setaf 3;
+echo "Decompressing logs from spamguard2"
+tput setaf 3;
+bzip2 -d *.bz2;
+tput setaf 2;
+echo "Finished decompressing logs from spamguard2"
+
+##Remove old zip-files
+rm *.bz2;
+
+##Parse files
+### SMTPRELAY
+tput setaf 3;
+echo "Initiating parsing of logs from smtprelays"
+cd ~/$ticketnumber/tmp/smtprelay;
+
+for FILE in *
+	do 
+		FILEYEAR=$(echo $FILE | grep -oE '20[0-9][0-9]')
+		cat $FILE | grep -E "${regexsmtprelaypt1}${address}${regexsmtprelaypt2}" | awk '{print $1,$2,$3,$4,$12,$14}' | sed 's/<//g;s/>//g;s/,//g' | while read line 
+			do
+				echo -n $FILEYEAR' '>> ~/$ticketnumber/maillog-$ticketnumber-$todaysdate-$address.txt
+				echo $line >> ~/$ticketnumber/maillog-$ticketnumber-$todaysdate-$address.txt
+			done
+done
+
+tput setaf 2;
+echo "Finished parsing logs from smtprelays";
+
+### SPAMGUARD
+tput setaf 3;
+echo "Initiating parsing of logs from spamguards";
+cd ~/$ticketnumber/tmp/spamguard;
+
+for FILE in *
+	do 
+		FILEYEAR=$(echo $FILE | grep -oE '20[0-9][0-9]')
+		cat $FILE | grep -E "${regexspamguardpt1}${address}${regexspamguardpt2}" | awk '{print $1,$2,$3,$4,$12,$14}' | sed 's/<//g;s/>//g;s/,//g' | while read line 
+			do
+				echo -n $FILEYEAR' '>> ~/$ticketnumber/maillog-$ticketnumber-$todaysdate-$address.txt
+				echo $line >> ~/$ticketnumber/maillog-$ticketnumber-$todaysdate-$address.txt
+			done
+done
+
+tput setaf 2;
+echo "Finished parsing logs from spamguards";
+
+## Sort file
+tput setaf 3;
+echo "Sorting logs";
+LC_TIME=en_EN.UTF-8 sort -k1n -k2M -k3n -k4n ~/$ticketnumber/maillog-$ticketnumber-$todaysdate-$address.txt -o ~/$ticketnumber/maillog-$ticketnumber-$todaysdate-$address.txt
+
+tput setaf 2;
+echo "Finished sorting!";
+
+## Delete temporary log files
+tput setaf 3;
+echo "Cleaning temporary files"
+rm -rf ~/$ticketnumber/tmp
+tput setaf 2;
+echo "Finished cleaning!"
+
+tput setaf 2;
+echo "The search result can be found in /home/$ticketnumber"
+ls ~/$ticketnumber
+
+
+
