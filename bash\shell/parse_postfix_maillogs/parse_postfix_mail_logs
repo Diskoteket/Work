@@ -1,5 +1,5 @@
 #!/bin/bash
-# Written by Tim Wetterek Andersson(tim@wetterek.se) 2020-12-15
+# Written by Tim Wetterek Andersson (tim@wetterek.se) 2020-12-15
 todaysdate=$(date +'%Y-%m-%d');
 
 smtprelay1="smtprelay1";
