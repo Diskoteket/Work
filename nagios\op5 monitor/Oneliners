@@ -1,0 +1,6 @@
+
+# This is a collection of useful oneliners for OP5 Monitor
+#--------------------------------------------------------------------
+# To collect the current monitoring of hosts or services for a user
+grep -A 6 -B 7 'username' /opt/monitor/etc/hosts.cfg
+grep -A 6 -B 7 'username' /opt/monitor/etc/services.cfg
