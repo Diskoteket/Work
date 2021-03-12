@@ -38,13 +38,13 @@ if($submissionQueue.MessageCount  -lt $thresholdWarning){
     exit 0
 }
 
-elseif($submissionQueue.MessageCount -ge $treshold_warning -and $submissionQueue.MessageCount -lt $thresholdCritical){
+elseif($submissionQueue.MessageCount -ge $thresholdWarning -and $submissionQueue.MessageCount -lt $thresholdCritical){
     # Warning to OP5
     write-host "SubmissionQueue over warning levels: "$submissionQueue.MessageCount" Status:"$submissionQueue.Status
     exit 1
 }
 
-elseif($submissionQueue.MessageCount -ge $treshold_warning -and $submissionQueue.MessageCount -ge $thresholdCritical){
+elseif($submissionQueue.MessageCount -ge $thresholdWarning -and $submissionQueue.MessageCount -ge $thresholdCritical){
     # Critical to OP5
     write-host "SubmissionQueue over critical levels: "$submissionQueue.MessageCount" Status:"$submissionQueue.Status
     exit 2
